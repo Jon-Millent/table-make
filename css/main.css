@@ -1,0 +1,144 @@
+html,body{
+	padding: 0;
+	margin: 0;
+}
+html{ font-family: "microsoft yahei", "HanHei SC","PingHei","PingFang SC","STHeitiSC-Light","Helvetica Neue","Helvetica","Arial",sans-serif; }
+
+.select{
+	width: 100%;
+}
+.select .wrap{
+	width: 1000px;
+	margin:0 auto;
+}
+.header{
+	height: 20px;
+	padding: 5px 0;
+	background-color: #8CAAAF;
+}
+.header span{
+	display: block;
+	width: 20px;
+	height: 20px;
+	float: left;
+	border-radius: 50%;
+	background-color: #FD3228;
+	margin-right: 5px;
+}
+.header span.it-2{
+	background-color: #F4C612;
+}
+.header span.it-3{
+	background-color: #797979;
+}
+.header .title{
+	width: 900px;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	font-size: 14px;
+	color: #333;
+
+}
+.header .title a{
+	color: #fff;
+}
+
+.tool{
+	height: 60px;
+	background: #B3D1C1;
+	background: linear-gradient(10deg,#B3D1C1,#C4FCDE);
+	
+	
+}
+.tool .wrap{
+	height: 60px;
+}
+
+.content{
+	position: absolute;
+	top: 90px;
+	bottom: 20px;
+	left: 0;
+	background: #333;
+	background: linear-gradient(to right,#AC9A96,#ECEBE9);
+}
+.content .wrap{
+	width: 1100px;
+	background-color: #fff;
+	height: 100%;
+	overflow: auto;
+	box-shadow: 4px 4px 10px #333;
+	position: relative;
+
+	overflow: hidden;
+}
+#mainbox{
+	position: relative;
+}
+.xbox,.ybox{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	overflow: hidden;
+}
+.xbox span{
+	float: left;
+	border-left: 1px solid #333;
+	border-bottom: 1px solid #333;
+}
+.xbox span,.ybox span{
+	
+	display: block;
+	height: 19px;
+	line-height: 19px;
+	text-align: center;
+	background-color: #F3F5F2;
+	color: #404040;
+}
+.boxs span{
+	cursor: pointer;
+}
+.boxs span:hover{
+	background-color: #D8D6D6;
+}
+.ybox span{
+	border-top: 1px solid #333;
+	border-right: 1px solid #333;
+}
+.xbox .wraps{
+	height: 100%;
+}
+.xbox{
+	width: 100%;
+	height: 20px;
+	background-color: #EBF0F5;
+	margin-top: -298px;
+	margin-left: -531px;
+}
+.ybox{
+	width: 20px;
+	height: 100%;
+	background-color: #ccc;
+	margin-top: -279px;
+	margin-left: -550px;
+}
+#mainbox .test{
+	position: absolute;
+	width: 100%;
+}
+#tablebox{
+	position: absolute;
+	left: 20px;
+	top: 20px;
+	background-color: #fff;
+	overflow: auto;
+}
+.bottom{
+	position: absolute;
+	height: 20px;
+	bottom: 0px;
+	left: 0;
+	background-color: #8CAAAF;
+}
