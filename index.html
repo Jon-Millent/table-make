@@ -4,6 +4,17 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<link rel="stylesheet" type="text/css" href="./css/main.css">
+	<style type="text/css">
+		h1{color: #fff}
+	</style>
+
+	<!--[if lt IE 9]>
+		<style type="text/css">
+	*{
+		display:none;
+	}
+	<style>
+	<![endif]-->
 </head>
 <body>
 
@@ -13,19 +24,26 @@
 			<span class="it-2"></span>
 			<span class="it-3"></span>
 			<div class="title">
-				Table-Make <a href="">Github</a>			
+				Table-Make <a href="">Github</a> <i id="objname">(未命名)</i>		
 			</div>
 		</div>
 	</div>
 	<div class="select tool">
 		<div class="wrap">
-			xxxxxxx
+			<ul class="fixed-left">
+				<li class="item" id="newButton">
+					<div class="icon text">&#xe924;</div>
+					<p>新建</p>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<div class="select content" id="con">
 		<div class="wrap" id="mainbox">
 			<div class="test" id="testwrap"></div>
-			<div id="tablebox"></div>
+			<div id="tablebox">
+				<!-- Table -->
+			</div>
 
 			<div id="y" class="ybox boxs">
 				<div class="wraps"></div>
@@ -40,7 +58,40 @@
 			
 		</div>
 	</div>
-	
+	<div id="newButton-copy" class="mes mes-new window" style="display: none" >
+		<div class="header-box">New Project<span class="close"></span></div>
+		<div class="con-box">
+			<div class="item item-01">
+				<label for="pro-name">Name:</label><input type="text" name="tableName" id="pro-name"><p>项目名即为table的class name</p>
+			</div>
+			<div class="item item-01">
+				<label for="pro-width">Width:</label><input type="text" name="width" id="pro-width"><p>全局table每格的宽度(PX)</p>
+			</div>
+			<div class="item item-01">
+				<label for="pro-height">Height:</label><input type="text" name="height" id="pro-height"><p>全局table每格的高度(PX)</p>
+			</div>
+			<div class="item item-02" id="table-rev">
+				<label>Text-Align:</label>
+				<span class="icon" title="right">&#xea79;</span>
+				<span class="icon active" title="center">&#xea78;</span>
+				<span class="icon" title="left">&#xea77;</span>
+				<p>(～￣▽￣)～</p>
+			</div>
+			<div class="item item-01">
+				<label for="pro-lineheihgt">Line-Height:</label><input type="text" name="lineHeight" id="pro-lineheihgt"><p>全局table每格的行高(PX)</p>
+			</div>
+			<div class="item item-01">
+				<label for="pro-x">每行格数:</label><input type="text" name="x" id="pro-x"><p>全局table每行(X)的格数</p>
+			</div>
+			<div class="item item-01">
+				<label for="pro-y">每列格数:</label><input type="text" name="y" id="pro-y"><p>全局table每列(Y)的格数</p>
+			</div>
+			<div class="item item-03">
+				<a href="javascript:;" class="btn" id="newButtonOK">OK</a>
+			</div>
+		</div>
+
+	</div>
 </body>
 <script type="text/javascript" src="./js/pc.js"></script>
 <script type="text/javascript" src="./js/main.js"></script>
