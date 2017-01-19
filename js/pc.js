@@ -126,7 +126,7 @@
 			var ev=e||root.event;
 			var tag=ev.target||ev.srcElement;
 			if(tag.tagName.toLowerCase()==type){
-				fn();
+				fn(tag);
 			}
 		},
 		firstChild:function(node){
@@ -168,7 +168,7 @@
 		},
 		each : function(arr,fn,that){
 			var ff = that ? that : window;
-			if(Object.prototype.toString.call(arr) == '[object Array]'){
+			if(Object.prototype.toString.call(arr) == '[object Array]' || arr.length>0){
 				for(var i=0;i<arr.length;i++){
 					fn.call(ff,i,arr[i]);
 				}
@@ -178,9 +178,12 @@
 				}
 			}else if(typeof arr == 'object'){
 				for(var i in arr){
-					fn.call(ff,i,arr[i]);l
+					fn.call(ff,i,arr[i]);
 				}
 			}
+		},
+		getNode : function(e){
+			return document.getElementById(e);
 		}
 	}
 	root.q=q;
