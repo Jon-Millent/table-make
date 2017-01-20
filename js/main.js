@@ -6,6 +6,7 @@ q.ready(function(){
 	var YNORMAL = 26;
 	var WIDTHNORMAL = 70;
 	var YHEIGHTNORMAL = 50;
+	var isNew = false;
 
 
 	var con = q.getNode('con');
@@ -25,6 +26,10 @@ q.ready(function(){
 	var newButtonCopy = q.getNode('newButton-copy'); //新建
 	var newButtonOK = q.getNode('newButtonOK'); //新建后OK
 	var tableRev = q.getNode('table-rev'); //行高切换
+	var objname = q.getNode('objname'); //标题
+	var mesXY = q.getNode('mesXY'); //坐标显示
+	var xWrap = x.children[0];
+	var yWrap = y.children[0];
 	/*
 		eles
 	*/
@@ -34,18 +39,23 @@ q.ready(function(){
 	*/
 	var tableMessage = {
 		tableName : 'myTable',
-		width : WIDTHNORMAL,
-		height : YHEIGHTNORMAL,
-		lineHeight : YHEIGHTNORMAL,
+		width : 60,
+		height : 30,
+		lineHeight : 30,
 		textAlign : 'center',
-		x : XNORMAL,
-		y : YNORMAL,
+		x : 10,
+		y : 10,
 		tableWidth : 0,
-		tableHeight : 0
+		tableHeight : 0,
+		tabObj : null
 	}
 	/*
 	data
 	*/
+	var mesShow = {
+		isSelect : false,
+		selectObj : []
+	}
 	var toolHelp = {
 		setRuler : function(){
 			var NOWWIDTH = testwrap.offsetWidth;
@@ -53,8 +63,7 @@ q.ready(function(){
 			x.style.width = NOWWIDTH-20 + 'px';
 			y.style.height = NOWHeight-20 + 'px';
 
-			var xWrap = x.children[0];
-			var yWrap = y.children[0];
+			
 			xWrap.innerHTML = yWrap.innerHTML = '';
 			q.each(XNORMAL,function(k,v){
 				var span = document.createElement('span');
@@ -103,6 +112,18 @@ q.ready(function(){
 		},
 		styleObject : {
 
+		},
+		setitem(obj,k,attr,value){
+
+			var gg = obj.children[0].children[k];
+			switch(attr){
+				case "width":
+					gg.style.width = value+'px';
+					break;
+				case "height":
+					gg.style.height = gg.style.lineHeight = value+'px';	
+					break;
+			}
 		}
 	}
 
@@ -138,23 +159,130 @@ q.ready(function(){
 		}
 	}
 	q.on(newButton,'click',function(){
+		if(isNew){
+			alert('已经新建，无法重新创建。刷新页面重置。')
+			return 0;
+		}
+		isNew = true;
 		newProject();
 	})
 	//新建OK后关闭,执行render操作
 	q.on(newButtonOK,'click',function(){
+
 		var inputs = newButtonCopy.getElementsByTagName('input');
 		q.each(inputs,function(k,v){
 			tableMessage[v.name] = v.value || tableMessage[v.name];
 		})
 		q.each(tableRev.children,function(k,v){
 			if(q.hasClass(v,'active')){
-				tableMessage.lineHeight = v.getAttribute('title');
+				tableMessage.textAlign = v.getAttribute('title');
 			}
 		})
+
+		console.log(tableMessage);
+
 		tableMessage.tableWidth = tableMessage.x*tableMessage.width;
 		tableMessage.tableHeight = tableMessage.y*tableMessage.height;
-		console.log(tableMessage)
+		tableMessage.tabObj = document.createElement('table');
+		q.addClass(tableMessage.tabObj,tableMessage.tableName);
+		tableMessage.tabObj.style.width = tableMessage.x*tableMessage.width + 'px';
+		tableMessage.tabObj.style.height = tableMessage.y*tableMessage.height + 'px';
+
+
+
+		toolHelp.addRule(tableMessage.tableName,"."+tableMessage.tableName,"border-collapse: collapse;");
+		toolHelp.addRule("border","."+tableMessage.tableName +" tr,"+"."+tableMessage.tableName+" th","border: 1px solid #000;");
+		toolHelp.addRule("lineHeight","."+tableMessage.tableName+" th","line-height:"+tableMessage.lineHeight+"px;text-align:"+tableMessage.textAlign+";");
+		q.each(parseInt(tableMessage.x),function(k,v){
+			var tr = document.createElement('tr');
+			q.addClass(tr,'row-'+k);
+			q.each(parseInt(tableMessage.y),function(key,value){
+				var th = document.createElement('th');
+				q.addClass(th,'x-'+k);
+				q.addClass(th,'y-'+key);
+				tr.appendChild(th);
+			})	
+			if(k>XNORMAL-1){
+				var span = document.createElement('span');
+				span.style.width = WIDTHNORMAL+'px';
+				span.innerHTML = 'Z-'+(k+1);	
+				xWrap.appendChild(span);
+				xWrap.style.width = xWrap.offsetWidth + WIDTHNORMAL + 'px';
+
+				var span = document.createElement('span');
+				
+				span.innerHTML = k+1;	
+				yWrap.appendChild(span);
+				yWrap.style.height = xWrap.offsetHeight + YHEIGHTNORMAL + 'px';	
+			}
+			tableMessage.tabObj.appendChild(tr);
+		})
+		tablebox.appendChild(tableMessage.tabObj);
+
+
+		var lister = tableMessage.tabObj.children[0].children[0];
+
+
+		
+		q.each(parseInt(tableMessage.x),function(k,v){
+			toolHelp.setitem(y,k,'height',lister.offsetHeight);
+			q.each(parseInt(tableMessage.y),function(key,value){
+
+				toolHelp.setitem(x,key,'width',lister.offsetWidth);
+
+			})	
+		})	
+
+
+
+		
+		
+		objname.innerHTML = tableMessage.tableName;
 		newProject();
+
+		q.on(tableMessage.tabObj,'mouseover',function(e){
+			if(!mesShow.isSelect){
+				q.pao(e,'th',function (ele) {
+					mesXY.innerHTML = ele.className;
+				})
+			}
+			
+		})
+		q.on(tableMessage.tabObj,'click',function(e){
+
+			mesShow.isSelect = true;
+			var isHave = false;
+			q.pao(e,'th',function (ele) {
+
+				q.each(mesShow.selectObj,function(k,v){
+					if(v == ele){
+						isHave = true;
+						mesShow.selectObj.splice(k,1);
+						ele.style.background = '';
+						
+					}
+				})
+				if(!isHave){
+					mesShow.selectObj.push(ele);
+					ele.style.background = 'pink';
+				}
+				mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';
+				if(mesShow.selectObj.length == 0){
+					mesShow.isSelect = false;
+				}
+				return ;
+
+			})
+
+			//else
+			//{
+			//	mesShow.isSelect = true;
+			//	mesShow.selectObj.style.backGround = '';
+			//	mesShow.selectObj = null;
+				
+			//}
+			
+		})
 
 	})
 	q.on(tableRev,'click',function(e){
