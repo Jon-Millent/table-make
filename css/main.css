@@ -152,8 +152,8 @@ i{
 }
 .xbox span{
 	float: left;
-	border-left: 1px solid #333;
-	border-bottom: 1px solid #333;
+	border-right: 1px solid #333;
+	border-bottom: 1px solid orange;
 }
 .xbox span,.ybox span{
 	
@@ -171,8 +171,8 @@ i{
 	background-color: #D8D6D6;
 }
 .ybox span{
-	border-top: 1px solid #333;
-	border-right: 1px solid #333;
+	border-bottom: 1px solid #333;
+	border-right: 1px solid orange;
 }
 .xbox .wraps{
 	height: 100%;
@@ -205,6 +205,7 @@ i{
 	bottom: 0px;
 	left: 0;
 	background-color: #8CAAAF;
+	text-align: right;
 }
 .message-box{
 	width: 100%;
@@ -337,4 +338,8 @@ i{
 	color: #fff;
 	text-decoration: none;
 	border-radius: 6px;
+}
+th:hover{
+	background-color:orange;
+	cursor: pointer;
 }
