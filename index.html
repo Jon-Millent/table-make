@@ -36,6 +36,71 @@
 					<p>新建</p>
 				</li>
 			</ul>
+			<form class="fixed-public">
+				<ul class="fixed-public-next">
+					<li class="item">
+						<ul>
+							<li class="item-next">
+								<input type="text" placeholder="文字大小">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="文字字体">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="文字颜色">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="背景颜色">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="行高">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="文字居中">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="宽">
+							</li>
+							<li class="item-next">
+								<input type="text" placeholder="高">
+							</li>
+							<li class="item-next">
+								<span class="icon">&#xe905;</span>
+								<input type="text" placeholder="内容">
+							</li>
+						</ul>
+					</li>
+					<li class="item">
+						<ul id="borderSelect">
+							<li class="item-next ic">&#xe232;</li>
+							<li class="item-next ic">&#xe230;</li>
+							<li class="item-next ic">&#xe229;</li>
+							<li class="item-next ic">&#xe22e;</li>
+							<li class="item-next ic active">&#xe22f;</li>
+							<li class="item-next pd">
+								<input type="text" class="peizhi" placeholder="边框配置(例如)1px solid #000">-
+							</li>
+							<li class="item-next pd">
+								表格斜线
+							</li>
+							<li class="item-next ic">
+								/
+							</li>
+							<li class="item-next ic">
+								\
+							</li>
+							<li class="item-next pd">
+								<span class="icon">&#xe905;</span>
+								<input type="text" placeholder="内容1">
+							</li> 
+							<li class="item-next pd">
+								<input type="text" placeholder="内容2">
+							</li>
+						</ul>
+					</li>
+				</ul>	
+			</form>
+			
 		</div>
 	</div>
 	<div class="select content" id="con">
@@ -44,7 +109,7 @@
 			<div id="tablebox">
 				<!-- Table -->
 			</div>
-
+			<div id="selectAll" class="icon">&#xea3d;</div>
 			<div id="y" class="ybox boxs">
 				<div class="wraps"></div>
 			</div>
@@ -85,6 +150,9 @@
 			</div>
 			<div class="item item-01">
 				<label for="pro-y">每列格数:</label><input type="text" name="y" id="pro-y"><p>全局table每列(Y)的格数</p>
+			</div>
+			<div class="item item-01">
+				<label for="pro-b">边框配置:</label><input type="text" name="border" id="pro-b"><p>例如:1px solid #000</p>
 			</div>
 			<div class="item item-03">
 				<a href="javascript:;" class="btn" id="newButtonOK">OK</a>
