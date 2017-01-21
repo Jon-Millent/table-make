@@ -1,4 +1,4 @@
-html,body,ul,li,p,input{
+html,body,ul,li,p,input,form{
 	padding: 0;
 	margin: 0;
 }
@@ -7,6 +7,7 @@ input{
 	border-radius: 3px;
 	border:1px solid #D3D1D4;
 	outline: none;
+	text-indent: 2px;
 }
 html,body{
 	width: 100%;
@@ -97,6 +98,7 @@ i{
 	height: 50px;
 
 }
+
 .tool .fixed-left li.item{
 	width: 50px;
 	height: 50px;
@@ -122,6 +124,56 @@ i{
 .tool .fixed-left li.item:hover{
 	background-color: #eee;
 	opacity: 0.8;
+}
+.tool .fixed-public{
+	float: left;
+	width:440px;
+	height: 50px;
+}
+.tool .fixed-public input{
+	width: 60px;
+	margin-right: 5px;
+}
+.tool .fixed-public .fixed-public-next{
+	width:640px;
+	height: 50px;
+
+}
+.tool .fixed-public .item{
+	width: 100%;
+	height: 24px;
+	padding-bottom: 1px;
+}
+.tool .fixed-public .item .item-next{
+	float: left;
+	font-size: 12px;
+	color: #333;
+
+}
+.tool .fixed-public .item .item-next.ic{
+
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	background-color: #eee;
+	color: #000;
+	border-radius: 6px;
+	font-family: 'icomoon';
+	font-size: 20px;
+	margin-right: 4px;
+	cursor: pointer;
+}
+.tool .fixed-public .item .item-next.pd{
+	padding-top: 2px;
+	padding-right: 2px;
+}
+.tool .fixed-public .item .item-next.ic.active{
+	background-color: #333;
+	color: #fff;
+}
+.tool .fixed-public .item .item-next .peizhi{
+	width:200px;
 }
 .content{
 	position: absolute;
@@ -149,6 +201,10 @@ i{
 	top: 50%;
 	left: 50%;
 	overflow: hidden;
+
+}
+.xbox span,.ybox span{
+	box-sizing: border-box;
 }
 .xbox span{
 	float: left;
@@ -323,9 +379,7 @@ i{
 .mes-new .con-box div.item.item-02 p{
 	width: 100px;
 }
-.mes-new .con-box div.item.item-03{
-	padding-top: 40px;
-}
+
 .mes-new .con-box div.item a.btn{
 	display: block;
 	width: 300px;
@@ -341,5 +395,17 @@ i{
 }
 th:hover{
 	background-color:orange;
+	cursor: pointer;
+}
+#selectAll{
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: #333;
+	line-height: 20px;
+	text-align: center;
+	color: #fff;
 	cursor: pointer;
 }
