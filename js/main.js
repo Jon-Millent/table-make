@@ -7,6 +7,9 @@ q.ready(function(){
 	var WIDTHNORMAL = 70;
 	var YHEIGHTNORMAL = 50;
 	var isNew = false;
+	var XARR = 10;
+	var YARR = 10;
+	var zIndex = 100;
 
 
 
@@ -26,12 +29,23 @@ q.ready(function(){
 	var newButton = q.getNode('newButton'); //新建
 	var newButtonCopy = q.getNode('newButton-copy'); //新建
 	var newButtonOK = q.getNode('newButtonOK'); //新建后OK
+
+	var newButtonPass = q.getNode('passButton'); //通用
+	var newButtonPassCopy = q.getNode('passButton-copy'); //通用
+
+	var xieButton = q.getNode('xieButton');
+	var xieButtonCopy = q.getNode('xieButton-copy');
+	var xieTestItem = q.getNode('xieTest').children;
+
 	var tableRev = q.getNode('table-rev'); //行高切换
 	var objname = q.getNode('objname'); //标题
 	var mesXY = q.getNode('mesXY'); //坐标显示
 	var xWrap = x.children[0];
 	var yWrap = y.children[0];
 	var borderSelect = q.getNode('borderSelect');
+	var closeGroup = q.getElementsByClassName('close');
+	
+	
 	/*
 		eles
 	*/
@@ -45,8 +59,8 @@ q.ready(function(){
 		height : 30,
 		lineHeight : 30,
 		textAlign : 'center',
-		x : 10,
-		y : 10,
+		x : XARR,
+		y : YARR,
 		tableWidth : 0,
 		tableHeight : 0,
 		tabObj : null,
@@ -127,6 +141,75 @@ q.ready(function(){
 					gg.style.height = gg.style.lineHeight = value+'px';	
 					break;
 			}
+		},
+		setXieLine : function(type,color,bgColor,parentss,text1,text2){
+			parentss.innerHTML = '';
+			var bLine = document.createElement('span');
+			var cLine = document.createElement('span');
+
+			var con1 = document.createElement('span');
+			var con2 = document.createElement('span');
+
+			var parentBgColor = bgColor;
+			var GGLine = {};
+
+
+			parentss.style.position = 'relative';
+			parentss.style.overflow = 'hidden';
+			console.log(parentss.clientWidth)
+			var W = parentss.clientWidth;
+			var H = parentss.clientHeight;
+			var LINEWidth = parentss.clientWidth/2 + 'px';
+			var LINEHeight = parentss.clientHeight/2 + 'px';
+
+			bLine.style.position = cLine.style.position = con1.style.position = con2.style.position = 'absolute';
+			bLine.style.borderStyle = cLine.style.borderStyle = 'solid';
+			bLine.style.display = cLine.style.display = con1.style.display = con2.style.display = 'block';
+			bLine.style.left = bLine.style.top  ='0px';
+			
+			con1.innerHTML = text1;
+			con2.innerHTML = text2;
+
+			GGLine.width = LINEHeight+' '+LINEWidth+' '+LINEHeight+' '+LINEWidth;
+			if(type == 1){
+				cLine.style.left = '1px';
+				cLine.style.top = '-1px';
+				GGLine.colorX = color+ ' '+color+' '+'transparent transparent';
+				GGLine.colorY = bgColor+ ' '+bgColor+' '+'transparent transparent';
+			}else{
+				cLine.style.left = '-1px';
+				cLine.style.top = '-1px';
+				GGLine.colorX = color+' transparent transparent '+color;
+				GGLine.colorY = bgColor+' transparent transparent '+bgColor;
+			}
+			console.log()
+			bLine.style.borderWidth = cLine.style.borderWidth = GGLine.width;
+			bLine.style.borderColor = GGLine.colorX;
+			cLine.style.borderColor = GGLine.colorY;
+
+
+
+			parentss.appendChild(bLine);
+			parentss.appendChild(cLine);
+			parentss.appendChild(con1);
+			parentss.appendChild(con2);
+
+			return function(){
+
+				var GH1 = H/2 + (H/2 - con1.offsetHeight) / 2 + 'px';
+				var GH2 = (H/2  - con1.offsetHeight )/ 2 +'px';
+				if(type==1){
+					con1.style.top = GH1;
+					con2.style.top = GH2;
+				}else{
+					con2.style.top = GH1;
+					con1.style.top = GH2;
+				}
+
+				con1.style.left = (W/2 - con1.offsetWidth) / 2 + 'px'; 
+				con2.style.left = ((W+W/2) - con2.offsetWidth) / 2 + 'px'; 
+			}
+			
 		}
 	}
 
@@ -154,23 +237,26 @@ q.ready(function(){
 	//无侵入式define
 
 	//新建
-	function newProject(){
-		if(newButtonCopy.style.display == 'none'){
-			windowHelp.open(newButtonCopy,'window-open');
+	function newProject(node){
+		if(node.style.display == 'none'){
+			node.style.zIndex = ++zIndex;
+			windowHelp.open(node,'window-open');
 		}else{
-			windowHelp.close(newButtonCopy,'window-open');
+			windowHelp.close(node,'window-open');
 		}
 	}
 	q.on(newButton,'click',function(){
+		
+		newProject(newButtonCopy);
+	})
+	//新建OK后关闭,执行render操作
+	q.on(newButtonOK,'click',function(){
+
 		if(isNew){
 			alert('已经新建，无法重新创建。刷新页面重置。')
 			return 0;
 		}
 		isNew = true;
-		newProject();
-	})
-	//新建OK后关闭,执行render操作
-	q.on(newButtonOK,'click',function(){
 
 		var inputs = newButtonCopy.getElementsByTagName('input');
 		q.each(inputs,function(k,v){
@@ -182,44 +268,52 @@ q.ready(function(){
 			}
 		})
 
-		// console.log(tableMessage);
-
+		console.log(tableMessage,'beta');
+		var parAttr = ['width','height','x','y'];
+		q.each(parAttr,function(k,v){
+			tableMessage[v] = parseInt(tableMessage[v]);
+		})
 		tableMessage.tableWidth = tableMessage.x*tableMessage.width;
 		tableMessage.tableHeight = tableMessage.y*tableMessage.height;
+		console.log(tableMessage.tableHeight)
 		tableMessage.tabObj = document.createElement('table');
 		q.addClass(tableMessage.tabObj,tableMessage.tableName);
-		tableMessage.tabObj.style.width = tableMessage.x*tableMessage.width + 'px';
-		tableMessage.tabObj.style.height = tableMessage.y*tableMessage.height + 'px';
+		tableMessage.tabObj.style.width =tableMessage.tableWidth +'px';
+		tableMessage.tabObj.style.height = tableMessage.tableHeight + 'px';
 
 
 		toolHelp.addRule(tableMessage.tableName,"."+tableMessage.tableName,"border-collapse: collapse;");
 		toolHelp.addRule("border","."+tableMessage.tableName +" tr,"+"."+tableMessage.tableName+" th","border: "+tableMessage.border);
-		console.log("border: "+tableMessage.border)
+
 		toolHelp.addRule("lineHeight","."+tableMessage.tableName+" th","line-height:"+tableMessage.lineHeight+"px;text-align:"+tableMessage.textAlign+";");
-		q.each(parseInt(tableMessage.x),function(k,v){
+		q.each(tableMessage.y,function(k,v){
 			var tr = document.createElement('tr');
 			q.addClass(tr,'row-'+k);
-			q.each(parseInt(tableMessage.y),function(key,value){
+			q.each(tableMessage.x,function(key,value){
 				var th = document.createElement('th');
 				q.addClass(th,'x-'+k);
 				q.addClass(th,'y-'+key);
 				tr.appendChild(th);
 			})	
-			if(k>XNORMAL-1){
-				var span = document.createElement('span');
-				span.style.width = WIDTHNORMAL+'px';
-				span.innerHTML = 'Z-'+(k+1);	
-				xWrap.appendChild(span);
-				xWrap.style.width = xWrap.offsetWidth + WIDTHNORMAL + 'px';
 
+			if(k>YNORMAL-1){
 				var span = document.createElement('span');
-				
 				span.innerHTML = k+1;	
 				yWrap.appendChild(span);
 				yWrap.style.height = xWrap.offsetHeight + YHEIGHTNORMAL + 'px';	
 			}
 			tableMessage.tabObj.appendChild(tr);
 		})
+		q.each(tableMessage.x,function(k,v){
+			if(k>XNORMAL-1){
+				var span = document.createElement('span');
+				span.style.width = WIDTHNORMAL+'px';
+				span.innerHTML = 'Z-'+(k+1);	
+				xWrap.appendChild(span);
+				xWrap.style.width = xWrap.offsetWidth + WIDTHNORMAL + 'px';
+			}
+		})
+			
 		tablebox.appendChild(tableMessage.tabObj);
 
 
@@ -227,11 +321,11 @@ q.ready(function(){
 
 		console.log(tableMessage)
 		
-		q.each(parseInt(tableMessage.x),function(k,v){
+		q.each(tableMessage.y,function(k,v){
 			var lister = tableMessage.tabObj.children[k];
 
 			toolHelp.setitem(y,k,'height',lister.children[0].offsetHeight);
-			q.each(parseInt(tableMessage.y),function(key,value){
+			q.each(parseInt(tableMessage.x),function(key,value){
 
 				toolHelp.setitem(x,key,'width',lister.children[key].offsetWidth);
 
@@ -240,7 +334,7 @@ q.ready(function(){
 
 
 		objname.innerHTML = tableMessage.tableName;
-		newProject();
+		newProject(newButtonCopy);
 
 		q.on(tableMessage.tabObj,'mouseover',function(e){
 			if(!mesShow.isSelect){
@@ -275,18 +369,7 @@ q.ready(function(){
 				return ;
 
 			})
-
-			//else
-			//{
-			//	mesShow.isSelect = true;
-			//	mesShow.selectObj.style.backGround = '';
-			//	mesShow.selectObj = null;
-				
-			//}
-			
 		})
-
-		console.log(toolHelp.styleObject.border)
 	})
 	q.on(tableRev,'click',function(e){
 		q.pao(e,'span',function(ele){
@@ -312,6 +395,27 @@ q.ready(function(){
 			q.addClass(tar,'active');
 		}
 	})
+	q.each(closeGroup,function(k,v){
+		q.on(v,'click',function(){
+			newProject(this.parentNode.parentNode);
+		})
+	})
+	q.on(newButtonPass,'click',function(){
+
+		newProject(newButtonPassCopy);
+
+	})
+	q.on(xieButton,'click',function(){
+		newProject(xieButtonCopy);
+	})
+
+	xieButtonCopy.style.display = 'block';
+	q.each(xieTestItem,function(k,v){
+		toolHelp.setXieLine(k+1,'#000','#E9E8E9',v,'内容一','内容二')();
+	})
+	xieButtonCopy.style.display = 'none';
+
+
 	//样式
 	// toolHelp.addRule("bodySet",'body',"color:red");
 	// console.log(toolHelp.styleObject)
