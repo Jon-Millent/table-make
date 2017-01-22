@@ -50,6 +50,23 @@
 		        callback();
 		    }
 		},
+		getElementsByClassName : function(className,node){
+			var parentNode = node || document;
+			console.log(className)
+			if(document.getElementsByClassName){
+				return parentNode.getElementsByClassName(className);
+			}else{
+				
+				var list  = parentNode.getElementsByTagName('*');
+				var group = [];
+				this.each(list,function(k,v){
+					if(q.hasClass(v,className)){
+						group.puah(v);
+					}
+				})
+				return group;
+			}
+		},
 		css:function(node,attr,value) {
 		    switch (arguments.length) {
 		        case 2:
@@ -184,6 +201,19 @@
 		},
 		getNode : function(e){
 			return document.getElementById(e);
+		},
+		mousewheel:function (obj,fn){
+			console.log(obj)
+			if(typeof obj.onmousewheel!=undefined){
+				obj.onmousewheel=function(e){
+					var ev=e||window.event;
+					fn(ev,ev.wheelDelta/Math.abs(ev.wheelDelta))
+				}
+			}else{
+				obj.addEventListener('DOMMouseScroll',function(e){
+					fn(e,-e.detail/Math.abs(e.detail))
+				},false)
+			}
 		}
 	}
 	root.q=q;
