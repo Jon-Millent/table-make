@@ -39,6 +39,12 @@ li{
 i{
 	font-style: normal;
 }
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
 .icon{
 	font-family: 'icomoon';
 }
@@ -94,7 +100,7 @@ i{
 }
 .tool .fixed-left{
 	float: left;
-	width: 100px;
+	width: 500px;
 	height: 50px;
 
 }
@@ -104,6 +110,7 @@ i{
 	height: 50px;
 	border-radius: 6px;
 	cursor: pointer;
+	float: left;
 }
 .tool .fixed-left li.item div.text{
 	width: 100%;
@@ -129,52 +136,9 @@ i{
 	float: left;
 	width:440px;
 	height: 50px;
+	background-color: #ccc;
 }
-.tool .fixed-public input{
-	width: 60px;
-	margin-right: 5px;
-}
-.tool .fixed-public .fixed-public-next{
-	width:640px;
-	height: 50px;
 
-}
-.tool .fixed-public .item{
-	width: 100%;
-	height: 24px;
-	padding-bottom: 1px;
-}
-.tool .fixed-public .item .item-next{
-	float: left;
-	font-size: 12px;
-	color: #333;
-
-}
-.tool .fixed-public .item .item-next.ic{
-
-	width: 24px;
-	height: 24px;
-	line-height: 24px;
-	text-align: center;
-	background-color: #eee;
-	color: #000;
-	border-radius: 6px;
-	font-family: 'icomoon';
-	font-size: 20px;
-	margin-right: 4px;
-	cursor: pointer;
-}
-.tool .fixed-public .item .item-next.pd{
-	padding-top: 2px;
-	padding-right: 2px;
-}
-.tool .fixed-public .item .item-next.ic.active{
-	background-color: #333;
-	color: #fff;
-}
-.tool .fixed-public .item .item-next .peizhi{
-	width:200px;
-}
 .content{
 	position: absolute;
 	top: 90px;
@@ -326,12 +290,12 @@ i{
 	cursor: pointer;
 }
 
-.mes-new .con-box div.item{
+.mes-new .con-box .item{
 	width: 580px;
 	height: 40px;
 
 }
-.mes-new .con-box div.item label{
+.mes-new .con-box .item label{
 	display: block;
 	width: 100px;
 	height: 40px;
@@ -339,7 +303,7 @@ i{
 	text-align: center;
 	float: left;
 }
-.mes-new .con-box div.item.item-01 input{
+.mes-new .con-box .item.item-01 input{
 	display: block;
 	width: 200px;
 	height: 20px;
@@ -349,7 +313,7 @@ i{
 	line-height: 20px;
 	font-size: 10px;
 }
-.mes-new .con-box div.item p{
+.mes-new .con-box .item p{
 	display: block;
 	width: 270px;
 	height: 40px;
@@ -358,7 +322,7 @@ i{
 	text-indent: 20px;
 	text-align: center;
 }
-.mes-new .con-box div.item.item-02 span{
+.mes-new .con-box .item.item-02 span{
 	display: block;
 	width: 40px;
 	height: 40px;
@@ -372,15 +336,15 @@ i{
 	margin-right: 40px;
 	cursor: pointer;
 }
-.mes-new .con-box div.item.item-02 span.active{
+.mes-new .con-box .item.item-02 span.active{
 	background: #333;
 	color: #fff;
 }
-.mes-new .con-box div.item.item-02 p{
+.mes-new .con-box .item.item-02 p{
 	width: 100px;
 }
 
-.mes-new .con-box div.item a.btn{
+.mes-new .con-box .item a.btn{
 	display: block;
 	width: 300px;
 	height: 20px;
@@ -392,6 +356,56 @@ i{
 	color: #fff;
 	text-decoration: none;
 	border-radius: 6px;
+}
+.mes-pass .con-box .item{
+	width: 50%;
+	float: left;
+}
+.mes-pass .con-box .item.item-01 input{
+	width: 150px;
+}
+.mes-pass .con-box .item.item-03{
+	width: 100%;
+}
+.mes-pass .con-box .item.item-03 input{
+	width: 420px;
+}
+.mes-pass .con-box .item.item-04{
+	width: 100%;
+}
+.mes-pass .con-box .item.item-04 li.item-next{
+	float: left;
+	height: 40px;
+	line-height: 40px;
+}
+.mes-pass .con-box .item.item-04 li.item-next.ic{
+	width: 40px;
+	height: 40px;
+	font-family: 'icomoon';
+	font-size: 40px;
+	background-color: #fff;
+	border-radius: 6px;
+	margin-left: 10px;
+	cursor: pointer;
+}
+.mes-pass .con-box .item.item-04 li.item-next.ic.active{
+	background-color: #333;
+	color: #fff;
+}
+
+
+.mes-xie .con-box .item.item-05{
+	width: 460px;
+	height: 120px;
+	padding: 0 60px;
+	background-color: #eee;
+	margin-top: 10px;
+}
+.mes-xie .con-box .item.item-05 span.bcon{
+	display: block;
+	width: 180px;
+	height: 120px;
+	border:1px solid #333;
 }
 th:hover{
 	background-color:orange;
