@@ -52,7 +52,6 @@
 		},
 		getElementsByClassName : function(className,node){
 			var parentNode = node || document;
-			console.log(className)
 			if(document.getElementsByClassName){
 				return parentNode.getElementsByClassName(className);
 			}else{
