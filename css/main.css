@@ -100,7 +100,7 @@ i{
 }
 .tool .fixed-left{
 	float: left;
-	width: 500px;
+	width: 800px;
 	height: 50px;
 
 }
@@ -131,6 +131,20 @@ i{
 .tool .fixed-left li.item:hover{
 	background-color: #eee;
 	opacity: 0.8;
+}
+.tool .fixed-left li.item.sin{
+	width: 200px;
+}
+.tool .fixed-left li.item.sin input{
+	width: 180px;
+	height: 30px;
+	margin-top: 10px;
+	margin-left: 10px;
+	text-indent: 10px;
+}
+.tool .fixed-left li.item.sin:hover{
+	opacity: 1;
+	background: #BCE8D0;
 }
 .tool .fixed-public{
 	float: left;
@@ -422,4 +436,15 @@ th:hover{
 	text-align: center;
 	color: #fff;
 	cursor: pointer;
+}
+#zhe{
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: #fff;
+	opacity: 0.5;
+	z-index: 1;
+}
+table tr th.activer{
+	background: pink !important;
 }
