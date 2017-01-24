@@ -55,6 +55,15 @@
 					<div class="icon text">&#xf00a;</div>
 					<p>Github</p>
 				</li>
+				<li class="item sin">
+					
+					<input type="text"  id="textButton" value="" placeholder="文字">
+					
+				</li>
+				<li class="item" id="calcelButton">
+					<div class="icon text">X</div>
+					<p>取消选择</p>
+				</li>
 			</ul>
 
 		</div>
@@ -117,7 +126,7 @@
 	</div>
 	<div id="passButton-copy" class="mes mes-new mes-pass window" style="display: none;" >
 		<div class="header-box icon">&#xe905; 通用设置<span class="close"></span></div>
-		<form  class="con-box">
+		<form  class="con-box" id="form-pass">
 			<div class="item item-01">
 				<label for="pro1-width">width:</label><input type="text" name="width" id="pro1-width">
 			</div>	
@@ -125,32 +134,30 @@
 				<label for="pro1-height">height:</label><input type="text" name="height" id="pro1-height">
 			</div>
 			<div class="item item-01">
-				<label for="pro1-fontsize">font-size:</label><input type="text" name="fontsize" id="pro1-fontsize">
+				<label for="pro1-fontsize">font-size:</label><input type="text" name="font-size" id="pro1-fontsize">
 			</div>
 			<div class="item item-01">
-				<label for="pro1-weight">font-weight:</label><input type="text" name="fontweight" id="pro1-weight">
+				<label for="pro1-weight">font-weight:</label><input type="text" name="font-weight" id="pro1-weight">
 			</div>	
 			<div class="item item-01">
-				<label for="pro1-family">font-family:</label><input type="text" name="fontfamily" id="pro1-family">
+				<label for="pro1-family">font-family:</label><input type="text" name="font-family" id="pro1-family">
 			</div>	
 			<div class="item item-01">
 				<label for="pro1-color">font-color:</label><input type="text" name="color" id="pro1-color">
 			</div>	
 			<div class="item item-01">
-				<label for="pro1-bg">bg-color:</label><input type="text" name="color" id="pro1-bg">
+				<label for="pro1-bg">bg-color:</label><input type="text" name="background-color" id="pro1-bg">
 			</div>	
 			<div class="item item-01">
-				<label for="pro1-line">line-height:</label><input type="text" name="bgcolor" id="pro1-line">
+				<label for="pro1-line">line-height:</label><input type="text" name="line-height" id="pro1-line">
 			</div>	
 			<div class="item item-01">
-				<label for="pro1-align">text-align:</label><input type="text" name="textalign" id="pro1-align">
+				<label for="pro1-align">text-align:</label><input type="text" name="text-align" id="pro1-align">
 			</div>	
 			<div class="item item-01">
-				<label for="pro1-align">font-style:</label><input type="text" name="fontstyle" id="pro1-style">
+				<label for="pro1-align">font-style:</label><input type="text" name="font-style" id="pro1-style">
 			</div>	
-			<div class="item item-01 item-03">
-				<label for="pro1-text"><span  class="icon">&#xe905;</span> text:</label><input type="text" name="text" id="pro1-text">
-			</div>	
+
 			<ul class="item item-01 item-04" id="borderSelect">
 				<li class="item-next" style="padding-left: 30px;">边框：</li>
 				<li class="item-next ic">&#xe232;</li>
@@ -159,11 +166,11 @@
 				<li class="item-next ic">&#xe22e;</li>
 				<li class="item-next ic active">&#xe22f;</li>
 				<li class="item-next">
-					<input type="text" class="peizhi" placeholder="边框配置(例如)1px solid #000" style="width: 200px;margin-left: 10px;">
+					<input type="text" class="peizhi" placeholder="边框配置(例如)1px solid #000" style="width: 200px;margin-left: 10px;" name="border">
 				</li>
 			</ul>
 			<div class="item item-03">
-				<a href="javascript:;" class="btn" id="newButtonPass" style="margin-top: 40px;">OK</a>
+				<a href="javascript:;" class="btn" id="newButtonPassG" style="margin-top: 40px;">OK</a>
 			</div>
 		</form>
 	</div>
@@ -191,22 +198,7 @@
 			</div>
 		</form>
 	</div>
-<!-- 				<li class="item-next pd">
-					表格斜线
-				</li>
-				<li class="item-next ic">
-					/
-				</li>
-				<li class="item-next ic">
-					\
-				</li>
-				<li class="item-next pd">
-					<span class="icon">&#xe905;</span>
-					<input type="text" placeholder="内容1">
-				</li> 
-				<li class="item-next pd">
-					<input type="text" placeholder="内容2">
-				</li> -->
+	<div id="zhe"></div>
 </body>
 <script type="text/javascript" src="./js/pc.js"></script>
 <script type="text/javascript" src="./js/main.js"></script>
