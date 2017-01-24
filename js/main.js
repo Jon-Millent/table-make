@@ -10,8 +10,9 @@ q.ready(function(){
 	var XARR = 10;
 	var YARR = 10;
 	var zIndex = 100;
-
-
+	var timeer = 0;
+	var ctrl = false;
+	var wrop = null;
 
 	var con = q.getNode('con');
 	var mainbox = q.getNode('mainbox');
@@ -32,6 +33,8 @@ q.ready(function(){
 
 	var newButtonPass = q.getNode('passButton'); //通用
 	var newButtonPassCopy = q.getNode('passButton-copy'); //通用
+	var newButtonPassG = q.getNode('newButtonPassG'); //通用
+	var formPass = q.getNode('form-pass');
 
 	var xieButton = q.getNode('xieButton');
 	var xieButtonCopy = q.getNode('xieButton-copy');
@@ -44,6 +47,13 @@ q.ready(function(){
 	var yWrap = y.children[0];
 	var borderSelect = q.getNode('borderSelect');
 	var closeGroup = q.getElementsByClassName('close');
+
+	var selectSSS = q.getNode('selectAll');
+
+	var zhe =q.getNode('zhe');
+
+	var textButton = q.getNode('textButton');
+	var calcelButton = q.getNode('calcelButton');
 	
 	
 	/*
@@ -84,6 +94,7 @@ q.ready(function(){
 			xWrap.innerHTML = yWrap.innerHTML = '';
 			q.each(XNORMAL,function(k,v){
 				var span = document.createElement('span');
+				span.index = k;
 				span.style.width = WIDTHNORMAL+'px';
 				span.innerHTML = TEXTX[k];
 				xWrap.appendChild(span);
@@ -91,6 +102,7 @@ q.ready(function(){
 			})
 			q.each(YNORMAL,function(k,v){
 				var span = document.createElement('span');
+				span.index = k;
 				span.style.height = YHEIGHTNORMAL+'px';
 				span.style.lineHeight = YHEIGHTNORMAL+'px';
 				span.innerHTML = k+1;
@@ -99,6 +111,9 @@ q.ready(function(){
 			})
 		},
 		resize : function(){
+			zhe.style.height = document.documentElement.clientHeight+'px';
+			zhe.style.width = document.documentElement.clientWidth+'px';
+			zhe.style.display = 'none';
 			con.style.height = mainbox.style.height = (document.documentElement.clientHeight - 110)+'px';
 			tablebox.style.height = document.documentElement.clientHeight - 130+'px';
 			tablebox.style.width = mainbox.offsetWidth - 20+'px';	
@@ -109,23 +124,24 @@ q.ready(function(){
 			y.style.marginLeft = -(hrefX)+'px';
 			y.style.marginTop = -(hrefY - 20)+'px';
 		},
-		addRule : function(name,ele,attr,size){
-			var s = size || 0;
+		addRule : function(name,type,attrName,attr){
+			var s = styleSheets.cssRules.length;
+			var text = '';
+			this.styleObject[name] = this.styleObject[name] || {};
+			this.styleObject[name].text = this.styleObject[name].text || {};
+			this.styleObject[name].text[type] = attr;
+
+			q.each(this.styleObject[name].text,function(k,v){
+				text+=v;
+			})
 			if(styleSheets.insertRule){ 
-				styleSheets.insertRule(ele+" {"+attr+"} ",s)
+				styleSheets.insertRule(attrName+" {"+text+"} ",s)
 			}else{
-				styleSheets.addRule(ele,attr,s)
+				styleSheets.addRule(attrName,text,s)
 			}
-			this.styleObject[name] = {
-				obj :ocssRules[0],
-				get : function(attr){
-					return this.obj.style[attr];
-				},
-				set : function(attr,value){
-					return this.obj.style[attr] = value;
-				}
-			};
-			return ocssRules[0];
+			
+			this.styleObject[name].obj = ocssRules[styleSheets.cssRules.length-1];
+
 		},
 		styleObject : {
 
@@ -156,7 +172,7 @@ q.ready(function(){
 
 			parentss.style.position = 'relative';
 			parentss.style.overflow = 'hidden';
-			console.log(parentss.clientWidth)
+
 			var W = parentss.clientWidth;
 			var H = parentss.clientHeight;
 			var LINEWidth = parentss.clientWidth/2 + 'px';
@@ -182,7 +198,7 @@ q.ready(function(){
 				GGLine.colorX = color+' transparent transparent '+color;
 				GGLine.colorY = bgColor+' transparent transparent '+bgColor;
 			}
-			console.log()
+
 			bLine.style.borderWidth = cLine.style.borderWidth = GGLine.width;
 			bLine.style.borderColor = GGLine.colorX;
 			cLine.style.borderColor = GGLine.colorY;
@@ -210,6 +226,30 @@ q.ready(function(){
 				con2.style.left = ((W+W/2) - con2.offsetWidth) / 2 + 'px'; 
 			}
 			
+		},
+		setTuoFeng : function(d){
+			var gg = d.split('-');
+			gg[1] = gg[1].replace(/^([a-zA-Z]{1,}?)/,function(a,b,c){
+				return a.toUpperCase();
+			})
+			return gg.join('');
+		}
+	}
+	var cssHelp = {
+		setTrTh : function(type,text){
+			toolHelp.addRule('trth',type,"."+tableMessage.tableName +" tr,"+"."+tableMessage.tableName+" th",text+';');
+		},
+		setTable : function(type,text){
+			toolHelp.addRule(tableMessage.tableName,type,"."+tableMessage.tableName,text+";");
+		},
+		setXLine : function(type,text,num){
+			toolHelp.addRule('xline',type,"."+'.'+tableMessage.tableName+' .y-'+num,text+";");
+		},
+		setYLine : function(type,text,num){
+			toolHelp.addRule('xline',type,"."+'.'+tableMessage.tableName+' .row-'+num +' th',text+";");
+		},
+		setAllTh : function(type,text,num){
+			toolHelp.addRule('trth',type,"."+tableMessage.tableName+" th",text+';');
 		}
 	}
 
@@ -226,6 +266,55 @@ q.ready(function(){
 			setTimeout(function(){
 				q.addClass(node,className);
 			},10);
+		},
+		chouseType : '',
+		openZhe : function(){
+			if(zhe.style.display == 'none'){
+				zhe.style.display = 'block';
+			}else{
+				zhe.style.display = 'none';
+			}
+		},
+		getForm : function(form){
+			var ggs = {};
+			q.each(form.elements,function(k,v){
+				ggs[v.getAttribute('name')] = v.value;
+			})
+			return ggs;
+		},
+		compNowW : function(){
+			q.each(tableMessage.y,function(k,v){
+				var lister = tableMessage.tabObj.children[k];
+
+				toolHelp.setitem(y,k,'height',lister.children[0].offsetHeight);
+				q.each(tableMessage.x,function(key,value){
+
+					toolHelp.setitem(x,key,'width',lister.children[key].offsetWidth);
+
+				})	
+			})	
+		}
+	}
+	var listHelp = {
+		cancelBg : function(){
+			q.each(mesShow.selectObj,function(k,v){
+				q.removeClass(v,'activer');
+			})
+		},
+		addBg : function(){
+			q.each(mesShow.selectObj,function(k,v){
+				q.addClass(v,'activer');
+			})
+		},
+		removeAll : function(){
+			mesShow.selectObj = [];
+		},
+		add : function(v){
+			mesShow.selectObj.push(v)
+		},
+		notChouse : function(){
+			this.cancelBg();
+			this.removeAll();
 		}
 	}
 	//只执行一次
@@ -246,7 +335,7 @@ q.ready(function(){
 		}
 	}
 	q.on(newButton,'click',function(){
-		
+		windowHelp.openZhe();
 		newProject(newButtonCopy);
 	})
 	//新建OK后关闭,执行render操作
@@ -268,24 +357,29 @@ q.ready(function(){
 			}
 		})
 
-		console.log(tableMessage,'beta');
 		var parAttr = ['width','height','x','y'];
 		q.each(parAttr,function(k,v){
 			tableMessage[v] = parseInt(tableMessage[v]);
 		})
 		tableMessage.tableWidth = tableMessage.x*tableMessage.width;
 		tableMessage.tableHeight = tableMessage.y*tableMessage.height;
-		console.log(tableMessage.tableHeight)
+
 		tableMessage.tabObj = document.createElement('table');
 		q.addClass(tableMessage.tabObj,tableMessage.tableName);
 		tableMessage.tabObj.style.width =tableMessage.tableWidth +'px';
 		tableMessage.tabObj.style.height = tableMessage.tableHeight + 'px';
 
 
-		toolHelp.addRule(tableMessage.tableName,"."+tableMessage.tableName,"border-collapse: collapse;");
-		toolHelp.addRule("border","."+tableMessage.tableName +" tr,"+"."+tableMessage.tableName+" th","border: "+tableMessage.border);
+		cssHelp.setTable('borderCollapse','border-collapse:collapse;');
+		cssHelp.setTable('fontSize','font-size:12px;');
+		cssHelp.setTrTh('border','border: '+tableMessage.border);
+		cssHelp.setAllTh('lineHeight','line-height:'+tableMessage.lineHeight+'px');
+		cssHelp.setAllTh('textAlign','text-align:'+tableMessage.textAlign+';');
+		cssHelp.setAllTh('fontWeight','font-weight:normal;');
+		cssHelp.setAllTh('width','width:'+tableMessage.width+'px;');
+		cssHelp.setAllTh('height','height:'+tableMessage.height+'px;');
 
-		toolHelp.addRule("lineHeight","."+tableMessage.tableName+" th","line-height:"+tableMessage.lineHeight+"px;text-align:"+tableMessage.textAlign+";");
+		
 		q.each(tableMessage.y,function(k,v){
 			var tr = document.createElement('tr');
 			q.addClass(tr,'row-'+k);
@@ -298,6 +392,7 @@ q.ready(function(){
 
 			if(k>YNORMAL-1){
 				var span = document.createElement('span');
+				span.index = k;
 				span.innerHTML = k+1;	
 				yWrap.appendChild(span);
 				yWrap.style.height = xWrap.offsetHeight + YHEIGHTNORMAL + 'px';	
@@ -313,28 +408,13 @@ q.ready(function(){
 				xWrap.style.width = xWrap.offsetWidth + WIDTHNORMAL + 'px';
 			}
 		})
-			
 		tablebox.appendChild(tableMessage.tabObj);
 
-
-		
-
-		console.log(tableMessage)
-		
-		q.each(tableMessage.y,function(k,v){
-			var lister = tableMessage.tabObj.children[k];
-
-			toolHelp.setitem(y,k,'height',lister.children[0].offsetHeight);
-			q.each(parseInt(tableMessage.x),function(key,value){
-
-				toolHelp.setitem(x,key,'width',lister.children[key].offsetWidth);
-
-			})	
-		})	
-
-
+		windowHelp.compNowW();	
 		objname.innerHTML = tableMessage.tableName;
 		newProject(newButtonCopy);
+		windowHelp.openZhe();
+
 
 		q.on(tableMessage.tabObj,'mouseover',function(e){
 			if(!mesShow.isSelect){
@@ -342,44 +422,114 @@ q.ready(function(){
 					mesXY.innerHTML = ele.className;
 				})
 			}
-			
 		})
 		q.on(tableMessage.tabObj,'click',function(e){
 
-			mesShow.isSelect = true;
+			if(mesShow.isSelect){
+				listHelp.cancelBg();
+				listHelp.removeAll();
+				mesShow.isSelect = false;
+			}
+			windowHelp.chouseType ={type : 1};
 			var isHave = false;
 			q.pao(e,'th',function (ele) {
-
-				q.each(mesShow.selectObj,function(k,v){
-					if(v == ele){
-						isHave = true;
-						mesShow.selectObj.splice(k,1);
-						ele.style.background = '';
-						
+				if(!ctrl){
+					if(wrop == ele){
+						listHelp.notChouse();
+						wrop = null;
+						return;
 					}
-				})
-				if(!isHave){
+					listHelp.notChouse();
+
 					mesShow.selectObj.push(ele);
-					ele.style.background = 'pink';
+					q.addClass(ele,'activer');
+					wrop = ele;
+					
+				}else{
+					q.each(mesShow.selectObj,function(k,v){
+						if(v == ele){
+							isHave = true;
+							mesShow.selectObj.splice(k,1);
+							q.removeClass(ele,'activer');
+						}
+					})
+					if(!isHave){
+						mesShow.selectObj.push(ele);
+						q.addClass(v,'activer');
+					}
+					mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';	
+
 				}
-				mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';
 				if(mesShow.selectObj.length == 0){
 					mesShow.isSelect = false;
 				}
-				return ;
+				try{
+					textButton.value = mesShow.selectObj[0].innerHTML;
+				}catch(e){
 
+				}
+				textButton.focus();
+				return ;
 			})
+		})
+		q.on(x,'click',function(e){
+			q.pao(e,'span',function(ele){
+				if(ele.index < tableMessage.x){
+					windowHelp.chouseType = {type : 2,index :ele.index};
+					mesShow.isSelect = true;
+					listHelp.cancelBg();
+					listHelp.removeAll();
+					q.each(q.getElementsByClassName('y-'+ele.index,tableMessage.tabObj),function(k,v){
+					 	listHelp.add(v);
+					})
+
+					listHelp.addBg();
+					mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';
+					textButton.focus();
+				}
+			})
+		})
+		q.on(y,'click',function(e){
+			q.pao(e,'span',function(ele){
+				if(ele.index < tableMessage.y){
+					windowHelp.chouseType = {type : 3,index :ele.index};
+					mesShow.isSelect = true;
+					listHelp.cancelBg();
+
+					listHelp.removeAll();
+					q.each(q.getElementsByClassName('x-'+ele.index,tableMessage.tabObj),function(k,v){
+					 	listHelp.add(v);
+					})
+
+					listHelp.addBg();
+					mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';
+					textButton.focus();
+				}
+			})
+		})
+		q.on(selectSSS,'click',function(e){
+			mesShow.isSelect = true;
+			windowHelp.chouseType = {type : 4};
+			listHelp.cancelBg();
+			listHelp.removeAll();
+			q.each(tableMessage.tabObj.children,function(k,v){
+				q.each(v.children,function(key,value){
+			 		listHelp.add(value);
+				})
+			})
+			listHelp.addBg();
+			mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';
+			textButton.focus();
 		})
 	})
 	q.on(tableRev,'click',function(e){
 		q.pao(e,'span',function(ele){
-			console.log(ele.parentNode.children)
+
 			q.each(ele.parentNode.children,function(k,v){
 				q.removeClass(v,'active');
 			})
 			q.addClass(ele,'active');
 		})
-
 	})
 	q.on(tablebox,'scroll',function(a){
 
@@ -398,15 +548,63 @@ q.ready(function(){
 	q.each(closeGroup,function(k,v){
 		q.on(v,'click',function(){
 			newProject(this.parentNode.parentNode);
+			windowHelp.openZhe();
 		})
 	})
+
+
 	q.on(newButtonPass,'click',function(){
+		windowHelp.openZhe();
+		newProject(newButtonPassCopy);
+	})
+
+
+	//执行通用
+	q.on(newButtonPassG,'click',function(){
+		windowHelp.openZhe();
+
+		if(mesShow.selectObj.length > 0){
+			var datas = windowHelp.getForm(formPass);
+			
+			switch(windowHelp.chouseType.type){
+				case 1:
+					console.log(datas)
+					q.each(mesShow.selectObj,function(key,value){
+						q.each(datas,function(k,v){
+							if(v!=''){
+								if(/-/.test(v)){
+									value.style[toolHelp.setTuoFeng(k)] = v;
+								}else{
+									value.style[k] = v;
+								}
+							}
+						})
+					})
+
+					break;
+				case 2:
+					//millent
+					q.each(datas,function(k,v){
+						if(v!=''){
+							if(/-/.test(v)){
+								cssHelp.setXLine(k,k+':'+v,windowHelp.chouseType);
+							}else{
+								cssHelp.setXLine(k,k+':'+v,windowHelp.chouseType);
+							}
+						}
+					})
+
+					break;
+			}
+			windowHelp.compNowW();
+		}
 
 		newProject(newButtonPassCopy);
-
+		
 	})
 	q.on(xieButton,'click',function(){
 		newProject(xieButtonCopy);
+		windowHelp.openZhe();
 	})
 
 	xieButtonCopy.style.display = 'block';
@@ -416,8 +614,26 @@ q.ready(function(){
 	xieButtonCopy.style.display = 'none';
 
 
-	//样式
-	// toolHelp.addRule("bodySet",'body',"color:red");
-	// console.log(toolHelp.styleObject)
-	// toolHelp.styleObject.bodySet.set("color",'pink');
+	q.on(textButton,'keydown',function(e){
+		clearTimeout(timeer);
+		timeer = setTimeout(function(){
+
+			q.each(mesShow.selectObj,function(k,v){
+				v.innerHTML = textButton.value
+			})
+			windowHelp.compNowW();
+		},10)
+	})
+	q.on(calcelButton,'click',function(){
+		listHelp.notChouse();
+	})
+	q.on(window,'keydown',function(e){
+		if(e.keyCode == '17'){
+			ctrl = true;
+		}
+	})
+	q.on(window,'keyup',function(e){
+		ctrl = false;
+	})
+	window.ggg = mesShow;
 })
