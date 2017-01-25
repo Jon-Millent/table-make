@@ -38,7 +38,9 @@ q.ready(function(){
 
 	var xieButton = q.getNode('xieButton');
 	var xieButtonCopy = q.getNode('xieButton-copy');
+	var xieButtonDo = q.getNode('newButtonXie');
 	var xieTestItem = q.getNode('xieTest').children;
+	var formXie = q.getNode('formXie');
 
 	var tableRev = q.getNode('table-rev'); //行高切换
 	var objname = q.getNode('objname'); //标题
@@ -55,7 +57,10 @@ q.ready(function(){
 	var textButton = q.getNode('textButton');
 	var calcelButton = q.getNode('calcelButton');
 	
-	
+	var selfButton = q.getNode('selfButton');
+
+	var getButton = q.getNode('getButton');
+
 	/*
 		eles
 	*/
@@ -243,12 +248,12 @@ q.ready(function(){
 			toolHelp.addRule(tableMessage.tableName,type,"."+tableMessage.tableName,text+";");
 		},
 		setXLine : function(type,text,num){
-			toolHelp.addRule('xline',type,"."+'.'+tableMessage.tableName+' .y-'+num,text+";");
+			toolHelp.addRule('xline',type,'.'+tableMessage.tableName+' .y-'+num,text+";");
 		},
 		setYLine : function(type,text,num){
-			toolHelp.addRule('xline',type,"."+'.'+tableMessage.tableName+' .row-'+num +' th',text+";");
+			toolHelp.addRule('xline',type,'.'+tableMessage.tableName+' .row-'+num +' th',text+";");
 		},
-		setAllTh : function(type,text,num){
+		setAllTh : function(type,text){
 			toolHelp.addRule('trth',type,"."+tableMessage.tableName+" th",text+';');
 		}
 	}
@@ -388,6 +393,7 @@ q.ready(function(){
 				q.addClass(th,'x-'+k);
 				q.addClass(th,'y-'+key);
 				tr.appendChild(th);
+				th.index = key;
 			})	
 
 			if(k>YNORMAL-1){
@@ -446,6 +452,7 @@ q.ready(function(){
 					wrop = ele;
 					
 				}else{
+					console.log('123')
 					q.each(mesShow.selectObj,function(k,v){
 						if(v == ele){
 							isHave = true;
@@ -455,7 +462,7 @@ q.ready(function(){
 					})
 					if(!isHave){
 						mesShow.selectObj.push(ele);
-						q.addClass(v,'activer');
+						q.addClass(ele,'activer');
 					}
 					mesXY.innerHTML = '选择 '+mesShow.selectObj.length+' 个';	
 
@@ -565,10 +572,10 @@ q.ready(function(){
 
 		if(mesShow.selectObj.length > 0){
 			var datas = windowHelp.getForm(formPass);
-			
+
 			switch(windowHelp.chouseType.type){
 				case 1:
-					console.log(datas)
+
 					q.each(mesShow.selectObj,function(key,value){
 						q.each(datas,function(k,v){
 							if(v!=''){
@@ -583,13 +590,48 @@ q.ready(function(){
 
 					break;
 				case 2:
-					//millent
+					
 					q.each(datas,function(k,v){
+
 						if(v!=''){
+
 							if(/-/.test(v)){
-								cssHelp.setXLine(k,k+':'+v,windowHelp.chouseType);
+								console.log(k,v)
+								cssHelp.setXLine(toolHelp.setTuoFeng(k),k+':'+v,windowHelp.chouseType.index);
 							}else{
-								cssHelp.setXLine(k,k+':'+v,windowHelp.chouseType);
+								cssHelp.setXLine(k,k+':'+v,windowHelp.chouseType.index);
+							}
+						}
+					})
+
+					break;
+				case 3:
+					
+					q.each(datas,function(k,v){
+
+						if(v!=''){
+
+							if(/-/.test(v)){
+								console.log(k,v)
+								cssHelp.setYLine(toolHelp.setTuoFeng(k),k+':'+v,windowHelp.chouseType.index);
+							}else{
+								cssHelp.setYLine(k,k+':'+v,windowHelp.chouseType.index);
+							}
+						}
+					})
+
+					break;
+				case 4:
+					
+					q.each(datas,function(k,v){
+
+						if(v!=''){
+
+							if(/-/.test(v)){
+								console.log(k,v)
+								cssHelp.setAllTh(toolHelp.setTuoFeng(k),k+':'+v);
+							}else{
+								cssHelp.setAllTh(k,k+':'+v);
 							}
 						}
 					})
@@ -603,6 +645,16 @@ q.ready(function(){
 		
 	})
 	q.on(xieButton,'click',function(){
+		newProject(xieButtonCopy);
+		windowHelp.openZhe();
+	})
+
+	//执行斜线
+	q.on(xieButtonDo,'click',function(e){
+		var ggMes = windowHelp.getForm(formXie);
+		q.each(mesShow.selectObj,function(key,value){
+			toolHelp.setXieLine(ggMes.select || 1,ggMes.bg1 || '#000',ggMes.bg2 || '#FFF',value,ggMes.con1 || '内容一',ggMes.con2 || '内二一')();
+		})
 		newProject(xieButtonCopy);
 		windowHelp.openZhe();
 	})
@@ -631,9 +683,120 @@ q.ready(function(){
 		if(e.keyCode == '17'){
 			ctrl = true;
 		}
+		if(e.keyCode == '46'){
+			textButton.value = "";
+			q.each(mesShow.selectObj,function(k,v){
+				v.innerHTML = '';
+			})
+		}
+		
 	})
 	q.on(window,'keyup',function(e){
 		ctrl = false;
+	})
+	q.on(selfButton,'click',function(){
+		if(mesShow.selectObj.length < 2){
+			alert('合并错误，选择元素数量不足');
+		}else{
+			var classNameItem = [];
+			var classNameItemBeta = [];
+			var hhs = [];
+			
+			q.each(mesShow.selectObj,function(k,v){
+
+				var jArr = v.className.replace(/\sactiver$/,'').split(' ');
+
+				classNameItem.push({
+					X : parseInt(jArr[0].split('-')[1]),
+					Y : parseInt(jArr[1].split('-')[1]),
+					ele : v
+				})
+
+			})
+			
+			classNameItem.sort(function(v1,v2){
+				return v1.X-v2.X;
+			})
+			var nowNumber = classNameItem[0].X;
+
+			var zuLie = classNameItem[classNameItem.length-1].X-classNameItem[0].X+1;
+
+			q.each(classNameItem,function(k,v){
+
+				if(v.X == nowNumber ){
+					hhs.push(v);
+				}else{
+					
+				}
+			})
+			var zuHange = hhs.length;
+
+			alert('列合并的时候去，请选择正确的元素，要不然会合并错误');
+			var objs = classNameItem[0].ele;
+			if(zuLie == '1'){
+				//列合并
+				
+				objs.setAttribute('colspan',zuHange);
+				q.each(zuHange-1,function(){
+					objs.parentNode.removeChild(q.next(objs));
+				})
+			}else if(zuHange == '1'){
+				//行合并
+
+				var nowObj = objs.parentNode;
+				var index = objs.index;
+				console.log(index)
+				objs.setAttribute('rowspan',zuLie);
+				q.each(zuLie-1,function(){
+					nowObj = q.next(nowObj);
+					nowObj.removeChild(nowObj.children[index]);
+				})
+			}else{
+				//行列合并
+				var index = objs.index;
+				var now = objs.parentNode;
+				var nowr = objs;
+				objs.setAttribute('rowspan',zuLie);
+				objs.setAttribute('colspan',zuHange);
+				q.each(zuLie,function(k,y){
+
+					q.each(zuHange,function(key,value){
+						if(k == 0){
+							if(key < zuHange-1){
+								now.removeChild(q.next(nowr));
+							}
+						}else{
+							now.removeChild(q.next(nowr));
+						}
+						
+					})
+					now = q.next(now);
+					nowr = now.children[index];
+				})
+			}
+			console.log(zuHange,zuLie)
+
+		}
+	})
+	q.on(getButton,'click',function(){
+
+
+		q.each(tableMessage.tabObj.children,function(k,v){
+			q.each(v.children,function(key,value){
+				q.removeClass(value,'x-'+k);
+			})
+		})
+
+		var html = tablebox.innerHTML;
+		var style = '<style type="text/css">';
+		q.each(toolHelp.styleObject,function(k,v){
+			
+			style += v.obj.cssText;
+		})
+		style+='</style>';
+		alert('代码已经输出到控制台');
+		console.log( style+'\n'+html);
+
 	})
 	window.ggg = mesShow;
 })
